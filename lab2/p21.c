@@ -15,16 +15,22 @@ int main(int argc, char **argv){
 	if(child_pid == 0){
 		printf("Child PID is %ld\n", (long) getpid());
 		if(argc == 1){
+            // wait signal from other program (than thar quite from thar "if")
 			pause();
 		}
+        // exit the pid of process; atoi get the onli nuber in string
 		_exit(atoi(argv[1]));
 	}else{
 		do{
+            // wait ending child
 			wait_pid = waitpid(child_pid, &status, WUNTRACED|WCONTINUED);
+            // crash at waiting
 			if(wait_pid == -1){
 				perror("waitpid");
 				exit(EXIT_FAILURE);
 			}	
+            // is the macross for output status ending
+            // we send some signal with console into child process, then that macros write what's happening
 			if(WIFEXITED(status)){
 				printf("exited, status=%d\n", WEXITSTATUS(status));
 			}else if(WIFSIGNALED(status)){

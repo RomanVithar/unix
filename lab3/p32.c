@@ -5,7 +5,17 @@
 #include<signal.h>
 
 void sigint_handler(int sig){
-    write(0, "Ahhh! SIGINT!\n", 14);
+    switch(sig){
+    case SIGTSTP:
+        printf("catching SIGSTP %d\n", sig);
+        break;
+    case SIGQUIT:
+        printf("catching SIGQUIT %d\n", sig);
+        break;
+    case SIGINT:
+        write(0, "Ahhh! SIGINT!\n", 14);
+        break;
+    }
 }
 
 int main(void){
@@ -16,6 +26,15 @@ int main(void){
     sa.sa_flags = 0;
     sigemptyset(&sa.sa_mask);
     if(sigaction(SIGINT, &sa, NULL) == -1){
+        perror("sigaction");
+        exit(1);
+    }
+
+    if(sigaction(SIGTSTP, &sa, NULL) == -1){
+        perror("sigaction");
+        exit(1);
+    }
+    if(sigaction(SIGQUIT, &sa, NULL) == -1){
         perror("sigaction");
         exit(1);
     }

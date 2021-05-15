@@ -1,6 +1,6 @@
-#include<stdio.h>
-#include<unistd.h>
-#include<signal.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <signal.h>
 
 void sig_handler(int sig){
    switch(sig){
@@ -24,4 +24,7 @@ int main(){
     if(signal(SIGTSTP, sig_handler) == SIG_ERR) perror("signal SIGTSTP");
     if(signal(SIGQUIT, sig_handler) == SIG_ERR) perror("signal SIGQUIT");
     if(signal(SIGUSR1, sig_handler) == SIG_ERR) perror("signal SIGUSR1");
+    pause();
+    raise(SIGUSR1);
+    return 0;
 }
